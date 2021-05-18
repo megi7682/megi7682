@@ -1,16 +1,32 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 app = Flask(__name__)
 
-@app.route('/a')
+@app.route('/')
 def hello():
-    return render_template()
+    return render_template('taxi.html')
 
 @app.route('/b')
 def hello2():
-    return 'Hello, World!bbbbbbbbbb'
+    return '안녕 나는 비페이지야~'
+
+@app.route('/form')
+def form():
+    return render_template('form.html')
+
+@app.route('/action_page', methods=['GET', 'POST'])
+def action_page():
+    if request.method == 'GET':
+        return '나는 액션 GET 페이지야~'
+    else:
+        search = request.form['search']
+        return '''당신은 '{}'로 검색을 했습니다<br>
+        결과를 보여드리겠습니다. 잠시만 기다려주세요~<br>
+        리스트 쫙~~~
+        '''.format(search)
+
 @app.route('/naver')
 def naver():
-    return '안녕 나는 네이버야~'
+    return render_template('naver.html')
 
 @app.route('/taxi')
 def taxi():
