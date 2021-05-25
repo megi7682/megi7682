@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from func import ck_idpw # 내가 만든 id pw 체크 함수
 app = Flask(__name__)
 
 @app.route('/')
@@ -12,6 +13,37 @@ def hello2():
 @app.route('/form')
 def form():
     return render_template('form.html')
+
+@app.route('/join')
+def join():
+    return render_template('join.html')
+
+@app.route('/join_action', methods=['GET', 'POST'])
+def join_action():
+    if request.method == 'GET':
+        return '나는 액션 GET 페이지야~'
+    else:
+        userid = request.form['userid']
+        pwd = request.form['pwd']
+        name = request.form['name']
+        phone = request.form['phone']
+        print(userid, pwd, name, phone)
+        return '회원가입 성공!!@'
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        userid = request.form['userid']
+        pwd = request.form['pwd']
+        print(userid, pwd)
+        return ck_idpw(userid, pwd)
+        # if ck_idpw(userid, pwd):
+        #     return '로그인 성공!!@'
+        # else:
+        #     return '가입 되지 않은 아이디나 패스워드 트림'
 
 @app.route('/action_page', methods=['GET', 'POST'])
 def action_page():

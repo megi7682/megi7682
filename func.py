@@ -19,3 +19,10 @@ def coin(m):
 
 # mym = coin(1000)
 # print("내돈은 {0}".format(mym))
+
+# 맞냐 틀렸냐
+def ck_idpw(id, pw):
+    if id == 'a' and pw == '123':
+        return '로그인 성공!!@'
+    else:
+        return '가입 되지 않은 아이디나 패스워드 트림'
