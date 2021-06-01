@@ -1,14 +1,26 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 from func import ck_idpw # 내가 만든 id pw 체크 함수
+import db
+
 app = Flask(__name__)
+app.secret_key = b'aaa!111/'
 
 @app.route('/')
 def hello():
     return render_template('taxi.html')
 
-@app.route('/b')
-def hello2():
-    return '안녕 나는 비페이지야~'
+@app.route('/coin')
+def coin():
+    if 'user' in session:
+        return '여기는 코인 거래소 로그인 사용자만~'
+    else:
+        return redirect('/login')  # 페이지 강제 이동
+
+# 로그아웃(session 제거)
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect('/')
 
 @app.route('/form')
 def form():
@@ -28,6 +40,8 @@ def join_action():
         name = request.form['name']
         phone = request.form['phone']
         print(userid, pwd, name, phone)
+        # 디비에 데이터 넣기
+        db.insert_user(userid, pwd, name, phone)
         return '회원가입 성공!!@'
 
 
@@ -39,7 +53,10 @@ def login():
         userid = request.form['userid']
         pwd = request.form['pwd']
         print(userid, pwd)
-        return ck_idpw(userid, pwd)
+        ret = db.get_idpw(userid, pwd)
+        if ret != None:
+            session['user'] = ret[3] # 로그인 처리
+        return ck_idpw(ret)
         # if ck_idpw(userid, pwd):
         #     return '로그인 성공!!@'
         # else:
