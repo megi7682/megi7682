@@ -3,6 +3,9 @@
 # 만약에 my 가 1이면 간다 2면 안간다
 # my = 1
 # 여기를 짤라낸다
+from flask.templating import render_template
+
+
 def gogo(my):
     if my == 1:
         print("간다")
@@ -24,6 +27,6 @@ def coin(m):
 def ck_idpw(ret):
     # if id == 'a' and pw == '123':
     if ret != None:
-        return '로그인 성공!!@'
+        return render_template('login2.html')
     else:
         return '가입 되지 않은 아이디나 패스워드 트림'

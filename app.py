@@ -5,16 +5,20 @@ import db
 app = Flask(__name__)
 app.secret_key = b'aaa!111/'
 
+@app.route('/loginneed')
+def loginneed():
+    return render_template('loginneed.html')
+
 @app.route('/')
 def hello():
-    return render_template('taxi.html')
+    return render_template('hyunjoon.html')
 
 @app.route('/coin')
 def coin():
     if 'user' in session:
-        return '여기는 코인 거래소 로그인 사용자만~'
+        return render_template('coin.html')
     else:
-        return redirect('/login')  # 페이지 강제 이동
+        return redirect('/loginneed')  # 페이지 강제 이동
 
 # 로그아웃(session 제거)
 @app.route('/logout')
@@ -42,7 +46,7 @@ def join_action():
         print(userid, pwd, name, phone)
         # 디비에 데이터 넣기
         db.insert_user(userid, pwd, name, phone)
-        return '회원가입 성공!!@'
+        return render_template('join2.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -77,22 +81,6 @@ def action_page():
 def naver():
     return render_template('naver.html')
 
-@app.route('/taxi')
-def taxi():
-    return ''' 
-    <!DOCTYPE html>
-    <html>
-    <body>
-
-    <h2>모범택시</h2>
-    <img src="https://img2.sbs.co.kr/img/sbs_cms/WE/2021/04/05/fNJ1617581491817.jpg" alt="모범택시" width="500" height="333">
-
-    </body>
-    </html>
-    '''
-# 웹브라우저에 http://127.0.0.1:5000/naver 
-# 위와같이 접속 하면 안녕 나는 네이버야~
-# 라는 글자를 나타나게 하시오
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
